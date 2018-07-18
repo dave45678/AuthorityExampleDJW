@@ -33,18 +33,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
                 .antMatchers(everyone).permitAll()
-
                 //Logged in STUDENTS, TEACHERS AND ADMINS can see this (other logged in users can't)
                 .antMatchers(authenticated).hasAnyAuthority("ADMIN","STUDENT","TEACHER")
-
-
                 //Only administrators can see this
-
                 .antMatchers(onlyadmin).hasAuthority("ADMIN")
                 //Only teachers can see this
-
                 .antMatchers(onlyteacher).hasAuthority("TEACHER")
-
                 //Teachers and administrators can see this
                 .antMatchers(teachersandadmin).hasAnyAuthority("TEACHER","ADMIN")
 
@@ -65,11 +59,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         PasswordEncoder encoder = new BCryptPasswordEncoder();
         auth.inMemoryAuthentication()
-                .withUser("defaultuser").password(encoder.encode("defaultpassword")).authorities("TEACHER")
+                .withUser("user").password(encoder.encode("password")).authorities("TEACHER")
                 .and()
-                .withUser("administrator").password(encoder.encode("administratorpassword")).authorities("ADMIN")
+                .withUser("admin").password(encoder.encode("password")).authorities("ADMIN")
                 .and()
-                .withUser("student").password(encoder.encode("studentpassword")).authorities("STUDENT")
+                .withUser("student").password(encoder.encode("password")).authorities("STUDENT")
                 .and()
                 .passwordEncoder(encoder);
 
